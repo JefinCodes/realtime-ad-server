@@ -4,6 +4,8 @@ const cors = require("cors");
 const verifyJwt = require("./middlewares/verifyJwt");
 const attachAdvertiser = require("./middlewares/attachAdvertiser");
 
+const dashboardRoutes = require("./routes/dashboard");
+
 const app = express();
 
 app.use(cors());
@@ -17,5 +19,7 @@ app.get("/", (req, res) => {
 
 app.use(verifyJwt);
 app.use(attachAdvertiser);
+
+app.use("/api/dashboard", dashboardRoutes);
 
 module.exports = app;
