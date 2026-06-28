@@ -1,6 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 
+const verifyJwt = require("./middleware/verifyJwt");
+const attachAdvertiser = require("./middleware/attachAdvertiser");
+
 const app = express();
 
 app.use(cors());
@@ -11,5 +14,8 @@ app.get("/", (req, res) => {
         message: "Realtime Ad Server API"
     });
 });
+
+app.use(verifyJwt);
+app.use(attachAdvertiser);
 
 module.exports = app;
