@@ -1,8 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 
-const verifyJwt = require("./middleware/verifyJwt");
-const attachAdvertiser = require("./middleware/attachAdvertiser");
+const verifyJwt = require("./middlewares/verifyJwt");
+const attachAdvertiser = require("./middlewares/attachAdvertiser");
 
 const app = express();
 
