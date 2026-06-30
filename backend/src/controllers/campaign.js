@@ -17,3 +17,37 @@ exports.createCampaign = async (req, res) => {
 
     }
 };
+
+exports.changeCampaignStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        const campaign = await campaignService.updateCampaignStatus(id, status);
+
+        res.status(200).json({
+            message: "Campaign status updated successfully.",
+            campaign,
+        });
+    } catch (error) {
+        res.status(400).json({
+            message: error.message,
+        });
+    }
+};
+
+exports.removeCampaign = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        await campaignService.deleteCampaign(id);
+
+        res.status(200).json({
+            message: "Campaign deleted successfully.",
+        });
+    } catch (error) {
+        res.status(400).json({
+            message: error.message,
+        });
+    }
+};

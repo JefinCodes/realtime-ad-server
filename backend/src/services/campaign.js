@@ -25,11 +25,9 @@ exports.createCampaign = async (advertiser, body) => {
     ) {
         throw new Error("All fields are required.");
     }
-
     if (Number(bid) <= 0) {
         throw new Error("Bid must be greater than 0.");
     }
-
     if (Number(budget) <= 0) {
         throw new Error("Budget must be greater than 0.");
     }
@@ -63,7 +61,6 @@ exports.createCampaign = async (advertiser, body) => {
     end.setHours(23, 59, 59, 999);
 
     const result = await prisma.$transaction(async (tx) => {
-
         const latestAdvertiser = await tx.advertiser.findUnique({
             where: {
                 id: advertiser.id,
@@ -72,7 +69,6 @@ exports.createCampaign = async (advertiser, body) => {
                 walletBalance: true,
             },
         });
-
         if (!latestAdvertiser) {
             throw new Error("Advertiser not found.");
         }
@@ -107,9 +103,66 @@ exports.createCampaign = async (advertiser, body) => {
                 endDate: end,
             },
         });
-
         return campaign;
     });
-
+    
     return result;
+};
+
+
+exports.updateCampaignStatus = async (campaignId, status) => {
+    if (!["active", "paused"].includes(status)) {
+        throw new Error("Invalid status.");
+    }
+
+    const campaign = await prisma.campaign.findUnique({
+        where: {
+            id: campaignId,
+        },
+    });
+    if (!campaign) {
+        throw new Error("Campaign not found.");
+    }
+
+    const now = new Date();
+    if (now > campaign.endDate) {
+        throw new Error("Campaign has already ended.");
+    }
+
+    if (campaign.status === status) {
+        return campaign;
+    }
+    if (
+        (campaign.status === "active" && status === "paused") ||
+        (campaign.status === "paused" && status === "active")
+    ) {
+        return await prisma.campaign.update({
+            where: {
+                id: campaignId,
+            },
+            data: {
+                status,
+            },
+        });
+    }
+    throw new Error("Invalid status transition.");
+};
+
+
+exports.deleteCampaign = async (campaignId) => {
+    const campaign = await prisma.campaign.findUnique({
+        where: {
+            id: campaignId,
+        },
+    });
+    if (!campaign) {
+        throw new Error("Campaign not found.");
+    }
+    
+    await prisma.campaign.delete({
+        where: {
+            id: campaignId,
+        },
+    });
+    return;
 };
