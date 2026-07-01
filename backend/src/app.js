@@ -5,6 +5,7 @@ const verifyJwt = require("./middlewares/verifyJwt");
 const attachAdvertiser = require("./middlewares/attachAdvertiser");
 
 const dashboardRoutes = require("./routes/dashboard");
+const advertiserRoutes = require("./routes/advertiser");
 const campaignRoutes = require("./routes/campaign");
 
 const app = express();
@@ -22,6 +23,7 @@ app.use(verifyJwt);
 app.use(attachAdvertiser);
 
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/advertiser", advertiserRoutes);
 app.use("/api/campaign", campaignRoutes);
 
 module.exports = app;
