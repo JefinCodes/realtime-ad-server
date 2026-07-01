@@ -110,7 +110,7 @@ exports.createCampaign = async (advertiser, body) => {
 };
 
 
-exports.updateCampaignStatus = async (campaignId, status) => {
+exports.updateCampaignStatus = async (advertiserId, campaignId, status) => {
     if (!["active", "paused"].includes(status)) {
         throw new Error("Invalid status.");
     }
@@ -122,6 +122,9 @@ exports.updateCampaignStatus = async (campaignId, status) => {
     });
     if (!campaign) {
         throw new Error("Campaign not found.");
+    }
+    if (campaign.advertiserId !== advertiserId) {
+        throw new Error("You are not authorized to modify this campaign.");
     }
 
     const now = new Date();
@@ -149,7 +152,7 @@ exports.updateCampaignStatus = async (campaignId, status) => {
 };
 
 
-exports.deleteCampaign = async (campaignId) => {
+exports.deleteCampaign = async (advertiserId, campaignId) => {
     const campaign = await prisma.campaign.findUnique({
         where: {
             id: campaignId,
@@ -157,6 +160,9 @@ exports.deleteCampaign = async (campaignId) => {
     });
     if (!campaign) {
         throw new Error("Campaign not found.");
+    }
+    if (campaign.advertiserId !== advertiserId) {
+        throw new Error("You are not authorized to delete this campaign.");
     }
     
     await prisma.campaign.delete({
