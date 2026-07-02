@@ -1,34 +1,29 @@
-const jwt = require("jsonwebtoken");
+const { jwtVerify, createRemoteJWKSet } = require("jose");
 
-module.exports = (req, res, next) => {
+const SUPABASE_URL = process.env.SUPABASE_URL;
 
+const JWKS = createRemoteJWKSet(
+    new URL(`${SUPABASE_URL}/auth/v1/.well-known/jwks.json`)
+);
+
+module.exports = async (req, res, next) => {
     try {
-
         const authHeader = req.headers.authorization;
-
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        
+        if (!authHeader?.startsWith("Bearer ")) {
             return res.status(401).json({
-                message: "Unauthorized"
+                message: "Unauthorized",
             });
         }
 
         const token = authHeader.split(" ")[1];
-
-        const payload = jwt.verify(
-            token,
-            process.env.SUPABASE_JWT_SECRET
-        );
+        const { payload } = await jwtVerify(token, JWKS);
 
         req.auth = payload;
-
         next();
-
     } catch (err) {
-
         return res.status(401).json({
-            message: "Invalid Token"
+            message: "Invalid Token",
         });
-
     }
-
 };
