@@ -28,7 +28,7 @@ export async function createCampaign(campaignData) {
  * "paused"
  */
 export async function updateCampaignStatus(id, status) {
-    const response = await api.put(
+    const response = await api.patch(
         `/api/campaign/${id}/status`,
         {
             status,

@@ -17,7 +17,7 @@ export async function getDashboard() {
  * Update advertiser name.
  */
 export async function updateAdvertiserName(name) {
-    const response = await api.put("/api/advertiser/name", {
+    const response = await api.patch("/api/advertiser/name", {
         name,
     });
 
@@ -29,7 +29,7 @@ export async function updateAdvertiserName(name) {
  * Amount is incremented by backend.
  */
 export async function addWalletBalance(amount) {
-    const response = await api.put("/api/advertiser/wallet", {
+    const response = await api.patch("/api/advertiser/wallet", {
         amount,
     });
 
