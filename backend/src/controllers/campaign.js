@@ -23,7 +23,7 @@ exports.changeCampaignStatus = async (req, res) => {
         const { id } = req.params;
         const { status } = req.body;
 
-        const campaign = await campaignService.updateCampaignStatus(id, status);
+        const campaign = await campaignService.updateCampaignStatus(req.advertiser.id, id, status);
 
         res.status(200).json({
             message: "Campaign status updated successfully.",
@@ -40,7 +40,7 @@ exports.removeCampaign = async (req, res) => {
     try {
         const { id } = req.params;
 
-        await campaignService.deleteCampaign(id);
+        await campaignService.deleteCampaign(req.advertiser.id, id);
 
         res.status(200).json({
             message: "Campaign deleted successfully.",
