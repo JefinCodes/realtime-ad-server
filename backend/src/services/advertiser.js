@@ -1,4 +1,5 @@
 const prisma = require("../config/prisma");
+const supabase = require("../config/supabase");
 
 exports.updateName = async (advertiserId, name) => {
 
