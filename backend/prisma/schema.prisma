@@ -47,7 +47,7 @@ model Campaign {
   impressions       Impression[]
 
   @@index([advertiserId])
-  @@index([status])
+  @@index([status, startDate, endDate])
   @@map("campaigns")
 }
 
