@@ -44,10 +44,6 @@ exports.serveAd = async (deviceType) => {
                 break;
             }
         }
-        
-        if (selectedCampaign.remainingBudget < selectedCampaign.bid) {
-            throw new Error("Campaign budget exhausted");
-        }
 
         await tx.campaign.update({
             where: {
