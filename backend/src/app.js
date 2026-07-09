@@ -7,6 +7,7 @@ const attachAdvertiser = require("./middlewares/attachAdvertiser");
 const dashboardRoutes = require("./routes/dashboard");
 const advertiserRoutes = require("./routes/advertiser");
 const campaignRoutes = require("./routes/campaign");
+const adServerRoutes = require("./routes/adserver");
 
 const app = express();
 
@@ -18,6 +19,8 @@ app.get("/", (req, res) => {
         message: "Realtime Ad Server API"
     });
 });
+
+app.use("/api/adserver", adServerRoutes);
 
 app.use(verifyJwt);
 app.use(attachAdvertiser);
