@@ -21,6 +21,14 @@ exports.serveAd = async (deviceType) => {
                     gt: 0,
                 },
             },
+            
+            select: {
+                id: true,
+                bid: true,
+                headline: true,
+                description: true,
+                imageUrl: true,
+            },
         });
 
         if (campaigns.length === 0) {
